@@ -1,0 +1,81 @@
+2b 
+
+import { useState } from "react";
+import "./App.css";
+import Timer from "./Timer";
+
+function App() {
+  const [run, setRun] = useState(true);
+
+  // Funktion zum Umkehren des Zustands run
+  const toggleRun = () => {
+    setRun((prevRun) => !prevRun);
+  };
+
+  return (
+    <>
+      <Timer doRun={run} initCalls={2000} />
+
+      {/* Button zum Umkehren des run Zustands */}
+      <button className="NiceButton" onClick={toggleRun}>
+        {String(run)} {/* Zeigt "true" oder "false" auf dem Button an */}
+      </button>
+    </>
+  );
+}
+
+export default App;
+
+
+
+
+
+import "./Timer.css";
+import React, { useState, useEffect } from "react";
+
+function Timer(props) {
+  const [run, setRun] = useState(props.doRun);
+  const [calls, setCalls] = useState(props.initCalls);
+
+  function getDateAsString() {
+    let d = new Date();
+    let str = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+    return str;
+  }
+
+  // Wenn sich doRun ändert, aktualisiere lokalen Zustand run
+  useEffect(() => {
+    console.log("useEffect for props.doRun called:", props.doRun);
+    setRun(props.doRun);
+  }, [props.doRun]);
+
+  // Nur wenn run === true, setInterval starten
+  useEffect(() => {
+    console.log("useEffect for run:", run);
+
+    if (!run) return;
+
+    const intervalId = setInterval(() => {
+      setCalls((prevCalls) => {
+        console.log("setState is called: ", prevCalls - 1);
+        return prevCalls - 1;
+      });
+    }, 100);
+
+    return () => {
+      console.log("Interval cleared");
+      clearInterval(intervalId);
+    };
+  }, [run]); // <- wird neu ausgeführt, wenn run sich ändert
+
+  return (
+    <>
+      <div className="timer">{getDateAsString()}</div>
+      <div className="timer">{calls}</div>
+      <div className="timer">{run ? "ON" : "OFF"}</div>
+    </>
+  );
+}
+
+export default Timer;
+

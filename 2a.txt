@@ -1,0 +1,117 @@
+2a
+
+
+import React from "react";
+import "./AddButton.css";
+
+function AddButton({ myInc, myCallback }) {
+  const handleClick = () => {
+    if (typeof myCallback === "function") {
+      myCallback(myInc); //hier wird Wert übergeben
+    } else {
+      alert(`Button-Wert: ${myInc}`);
+    }
+  };
+
+  return (
+    <button className="custom-add-button" onClick={handleClick}>
+      {myInc}
+    </button>
+  );
+}
+
+export default AddButton;
+
+
+
+
+
+
+
+import { useState } from "react";
+import DisplayTime from "./DisplayTime.jsx";
+import AddButton from "./AddButton.jsx";
+import "./App.css";
+
+function App() {
+  const [count, setCount] = useState(0);
+  const [timeInSec, setTimeInSec] = useState(0);
+  const add = (value) => {
+    setCount((prev) => prev + value);
+    setTimeInSec((prev) => prev + value);
+  };
+
+  return (
+    <>
+      {/*<IncCounter />*/}
+      <div className="mainsec">{count} sec</div>
+      <div className="button-container">
+        <AddButton myInc={1} myCallback={add}></AddButton>
+        <AddButton myInc={10} myCallback={add}></AddButton>
+        <AddButton myInc={100} myCallback={add}></AddButton>
+        <AddButton myInc={1000} myCallback={add}></AddButton>
+        <AddButton myInc={10000} myCallback={add}></AddButton>
+      </div>
+      <DisplayTime seconds={timeInSec}></DisplayTime>
+    </>
+  );
+}
+
+export default App;
+
+
+
+
+
+
+import "./DisplayTime.css";
+
+function DisplayTime(props) {
+  const hour = Math.floor(props.seconds / 3600);
+  const minute = Math.floor((props.seconds % 3600) / 60);
+  const second = props.seconds % 60;
+
+  return (
+    <div className="timedis">
+      <p>
+        {hour}h {minute}min {second}sec
+      </p>
+    </div>
+  );
+}
+
+export default DisplayTime;
+
+
+
+
+
+
+
+
+import "./IncCounter.css";
+import React, { useState } from "react";
+
+function IncCounter() {
+  const [count, setCount] = useState(0);
+
+  const increment = () => {
+    setCount(count + 1);
+  };
+
+  return (
+    <div className="nice-inc">
+      <h2>Count: {count}</h2>
+      <a href="#" class="myButton" onClick={increment}>
+        +
+      </a>
+    </div>
+  );
+}
+
+export default IncCounter;
+
+
+
+
+
