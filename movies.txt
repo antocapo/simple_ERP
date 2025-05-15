@@ -1,0 +1,149 @@
+import React, { useEffect, useState } from "react";
+import Display from "./Display";
+import Button from "./Button";
+
+let MOVIES = [
+  "Der Pate",
+  "Fight Club",
+  "Inception",
+  "Das Schweigen der Lämmer",
+  "Zurück in die Zukunft",
+];
+
+const App = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Zeigt den nächsten Film (zyklisch)
+  const nextMovie = () => {
+    setCurrentIndex((i) => (i + 1) % MOVIES.length);
+  };
+
+  // Zeigt den vorherigen Film (zyklisch rückwärts)
+  const prevMovie = () => {
+    setCurrentIndex((i) => (i - 1 + MOVIES.length) % MOVIES.length);
+  };
+
+  // Alle 1 Sekunde wird der Film automatisch gewechselt
+  useEffect(() => {
+    const timer = setInterval(() => {
+      nextMovie();
+    }, 1000);
+
+    // Aufräumen des Timers beim Verlassen der Komponente
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div>
+      <Button myText={"Nächster Film"} callBack={nextMovie} />
+      <Button myText={"Vorheriger Film"} callBack={prevMovie} />
+      <Display myVal={MOVIES[currentIndex]} />
+    </div>
+  );
+};
+
+export default App;
+
+
+
+import React from "react";
+import "./Button.css";
+
+const Button = (props) => {
+  return (
+    <button className="CounterNum" onClick={ props.callBack }>
+      {props.myText}
+    </button>
+  );
+};
+
+export default Button;
+
+
+
+
+
+import React from "react";
+import "./Display.css";
+
+const Display = (props) => {
+  return (
+    <div className="CounterNum Counter">
+      {props.myVal} <br></br>
+    </div>
+  );
+};
+
+export default Display;
+
+
+
+
+
+
+
+
+change direction
+
+
+import React, { useEffect, useState } from "react";
+import Display from "./Display";
+import Button from "./Button";
+
+let MOVIES = [
+  "Der Pate",
+  "Fight Club",
+  "Inception",
+  "Das Schweigen der Lämmer",
+  "Zurück in die Zukunft",
+];
+
+const App = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isForward, setIsForward] = useState(true); // true = vorwärts, false = rückwärts
+
+  // Vorwärts-Funktion
+  const nextMovie = () => {
+    setCurrentIndex((i) => (i + 1) % MOVIES.length);
+  };
+
+  // Rückwärts-Funktion
+  const prevMovie = () => {
+    setCurrentIndex((i) => (i - 1 + MOVIES.length) % MOVIES.length);
+  };
+
+  // Richtung automatisch wechseln im Intervall
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (isForward) {
+        nextMovie();
+      } else {
+        prevMovie();
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isForward]);
+
+  // Richtung umschalten
+  const toggleDirection = () => {
+    setIsForward((dir) => !dir);
+  };
+
+  return (
+    <div>
+      <Button myText={"Nächster Film"} callBack={nextMovie} />
+      <Button myText={"Vorheriger Film"} callBack={prevMovie} />
+      <Button myText={"Richtung wechseln"} callBack={toggleDirection} />
+      <Display myVal={MOVIES[currentIndex]} />
+    </div>
+  );
+};
+
+export default App;
+
+
+
+
+
+
