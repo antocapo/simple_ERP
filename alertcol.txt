@@ -1,0 +1,72 @@
+alertcol
+
+
+import React, { useState } from "react";
+import Display from "./Display";
+import Button from "./Button";
+
+const App = () => {
+  const [count, setCount] = useState(0);
+  const [color, setColor] = useState("black");
+
+  const handleClick = () => {
+    const newCount = count + 1;
+
+    if (newCount === 5) {
+      alert("Count reached 5!");
+    } else if (newCount > 5) {
+      setColor("red");
+    }
+
+    setCount(newCount);
+  };
+
+  return (
+    <div>
+      <Button myText={"Klick mich!"} callBack={handleClick} />
+      <Display value={count} textColor={color} />
+    </div>
+  );
+};
+
+export default App;
+
+
+
+
+
+
+
+import React from "react";
+
+const Button = (props) => {
+  return (
+    <button className="CounterNum" onClick={props.callBack}>
+      {props.myText}
+    </button>
+  );
+};
+
+export default Button;
+
+
+
+
+
+
+
+
+
+
+import React from "react";
+
+const Display = (props) => {
+  return (
+    <div className="CounterNum Counter" style={{ color: props.textColor }}>
+      Count: {props.value}
+    </div>
+  );
+};
+
+export default Display;
+
