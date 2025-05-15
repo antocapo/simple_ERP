@@ -1,0 +1,97 @@
+timer
+
+
+
+import { useEffect, useState } from 'react';
+import './App.css';
+import Button from "./Button.jsx";
+import Display from "./Display.jsx";
+
+function App() {
+    // Zustand für den Countdown-Wert
+    const [count, setCount] = useState(1000);
+    // Zustand für Steuerung: läuft der Timer oder nicht?
+    const [run, setRun] = useState(true);
+
+    // useEffect wird jedes Mal ausgeführt, wenn sich 'run' ändert
+    useEffect(() => {
+        let timer;
+
+        // Wenn run === true, starte den Timer
+        if (run) {
+            timer = setInterval(() => {
+                // Jede 500ms wird count um 1 reduziert
+                setCount(prev => prev - 1);
+            }, 500);
+        }
+
+        // Wenn run === false oder Komponente wird zerstört → Timer stoppen
+        return () => clearInterval(timer);
+    }, [run]); // useEffect reagiert auf Änderung von 'run'
+
+    // Diese Funktion wird aufgerufen, wenn der Button geklickt wird
+    function toggleTimer() {
+        // Schaltet zwischen Start und Stop
+        setRun(prev => !prev);
+    }
+
+    return (
+        <>
+            <Display myVal={count} />       {/* Anzeige des aktuellen Countdowns */}
+            <Button onClick={toggleTimer} isRunning={run} /> {/* Button zum Start/Stop */}
+        </>
+    );
+}
+
+export default App;
+
+
+
+
+
+
+
+
+
+
+
+function Button({ onClick, isRunning }) {
+    return (
+        // Button-Text zeigt Start oder Pause je nach Zustand
+        <button className="CounterNum" onClick={onClick}>
+            {isRunning ? 'Pause' : 'Start'}
+        </button>
+    );
+}
+
+export default Button;
+
+
+
+
+
+
+
+
+function Display({ myVal }) {
+    return (
+        // Zeigt den aktuellen Countdown-Wert an
+        <div className="CounterNum Counter">
+            Count: {myVal}
+        </div>
+    );
+}
+
+export default Display;
+
+
+
+
+
+
+
+
+
+
+
+
